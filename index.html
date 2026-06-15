@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Muscle Muffin ❤️</title>
+    <style>
+        /* --- GLOBAL STYLE & RESET --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', -apple-system, Roboto, sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Smooth full-page layout switching */
+        .page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+        }
+        .active {
+            display: flex;
+        }
+
+        /* --- FIXED DUAL AUDIO BUTTON PILLS --- */
+        .audio-controls-container {
+            display: none; /* Hidden on Page 1 intro */
+        }
+        .music-btn {
+            position: fixed;
+            top: 15px;
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.65);
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .music-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            transform: scale(1.05);
+        }
+        .music-btn.playing {
+            border-color: #ff4d6d;
+            box-shadow: 0 0 12px rgba(255, 77, 109, 0.6);
+            background: rgba(255, 77, 109, 0.2);
+        }
+        #btnHaareya {
+            left: 15px;
+        }
+        #btnRaabta {
+            right: 15px;
+        }
+
+        /* Generic Back Button Styling */
+        .back-btn {
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            padding: 10px 24px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin-top: auto; 
+            margin-bottom: 15px;
+            z-index: 10;
+        }
+        .back-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: scale(1.05);
+        }
+
+        /* --- PAGE 1: BABY PINK ENTER PAGE --- */
+        #page1 {
+            background-color: #ffc0cb; 
+            justify-content: center;
+        }
+        .enter-btn {
+            background-color: #ff4d6d; 
+            color: #ffffff;
+            border: none;
+            padding: 22px 60px;
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 77, 109, 0.5);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+        .enter-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(255, 77, 109, 0.9);
+            background-color: #ff758f;
+        }
+
+        /* Birthday Popper Blast Particles */
+        .confetti {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            pointer-events: none;
+            z-index: 999;
+            animation: popperBlast 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+        @keyframes popperBlast {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) rotate(720deg); opacity: 0; }
+        }
+
+        /* --- PAGE 2: WWE ROMAN REIGNS THEME --- */
+        #page2 {
+            background: url('roman_reigns.jpg') no-repeat center center/cover;
+            justify-content: space-between; 
+            align-items: center;
+            padding-top: 80px; 
+        }
+        .wwe-card {
+            max-width: 650px;
+            width: 90%; 
+            background: rgba(10, 10, 10, 0.45); 
+            padding: 35px 25px;
+            border-radius: 20px;
+            border: 3px solid #dc2626; 
+            box-shadow: 0 0 35px rgba(220, 38, 38, 0.4);
+            text-align: center;
+            -webkit-backdrop-filter: blur(4px); 
+            backdrop-filter: blur(4px);
+            animation: cardGlow 3s ease-in-out infinite alternate;
+            z-index: 5;
+        }
+        @keyframes cardGlow {
+            0% { box-shadow: 0 0 25px rgba(220, 38, 38, 0.3); }
+            100% { box-shadow: 0 0 45px rgba(255, 117, 143, 0.6); }
+        }
+        .pink-title {
+            color: #ff758f; 
+            font-size: 2.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+            line-height: 1.3;
+            text-shadow: 3px 3px 6px rgba(0,0,0,1); 
+        }
+        .red-body {
+            color: #ef4444; 
+            font-size: 1.3rem;
+            line-height: 1.8;
+            font-weight: 700;
+            margin-bottom: 35px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,1); 
+        }
+        .wwe-btn {
+            background: linear-gradient(90deg, #dc2626, #ff4d6d);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+        }
+        .wwe-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 77, 109, 0.6);
+        }
+
+        /* Heart & Emoji Falling Rain Styling */
+        .rain-drop {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            animation: rainFall 3.5s linear infinite;
+            top: -50px;
+        }
+        @keyframes rainFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            90% { opacity: 0.9; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- PAGE 3: REAL UNIVERSE / CANVAS THEME --- */
+        #page3 {
+            background: radial-gradient(circle at 50% 30%, #161233 0%, #080616 50%, #020106 100%);
+            justify-content: flex-start;
+            overflow-y: auto;
+            padding-top: 90px; 
+            padding-bottom: 60px;
+        }
+
+        /* Real Starfield Canvas Background */
+        #starCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Floating Universe Moon */
+        .cosmic-moon {
+            font-size: 4rem;
+            filter: drop-shadow(0 0 20px rgba(254, 240, 138, 0.7));
+            margin-bottom: 20px;
+            animation: floatMoon 4s ease-in-out infinite alternate;
+            z-index: 3;
+        }
+        @keyframes floatMoon {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            100% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .gallery-container {
+            max-width: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+            padding: 0 15px;
+            z-index: 5;
+        }
+        
+        /* Image box */
+        .pic-box {
+            width: 100%;
+            max-width: 380px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 4px solid #facc15; 
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+            transition: transform 0.3s ease;
+        }
+        .pic-box:hover {
+            transform: scale(1.02);
+        }
+        
+        .pic-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .yellow-text {
+            color: #facc15; 
+            font-size: 1.25rem;
+            line-height: 1.7;
+            text-align: center;
+            font-weight: 700;
+            padding: 10px 15px;
+            text-shadow: 0 0 8px rgba(250, 204, 21, 0.4), 2px 2px 4px rgba(0, 0, 0, 0.9);
+            max-width: 440px;
+        }
+
+        /* Big Bold Final Text Style */
+        .final-wish {
+            color: #facc15; 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            text-align: center;
+            text-transform: uppercase;
+            margin-top: 40px;
+            padding: 10px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            text-shadow: 0 0 15px rgba(250, 204, 21, 0.8), 3px 3px 5px rgba(0, 0, 0, 0.9);
+            animation: pulseText 2s infinite alternate;
+        }
+        @keyframes pulseText {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* --- MOBILE MEDIA QUERIES (RESPONSIVE FIXES) --- */
+        @media (max-width: 600px) {
+            .music-btn {
+                padding: 8px 12px;
+                font-size: 0.72rem;
+                top: 10px;
+            }
+            #btnHaareya { left: 10px; }
+            #btnRaabta { right: 10px; }
+            #page2 { padding-top: 70px; }
+            #page3 { padding-top: 70px; }
+
+            .enter-btn {
+                padding: 16px 40px;
+                font-size: 1.5rem;
+            }
+            .pink-title {
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+                margin-bottom: 15px;
+            }
+            .red-body {
+                font-size: 1.05rem;
+                line-height: 1.6;
+                margin-bottom: 25px;
+            }
+            .wwe-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+            .yellow-text {
+                font-size: 1.1rem;
+                line-height: 1.5;
+            }
+            .final-wish {
+                font-size: 1.75rem;
+            }
+            .wwe-card {
+                padding: 25px 15px;
+            }
+            .cosmic-moon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🎵 AUDIO ELEMENTS -->
+    <audio id="haareyaSong" src="haareya.mp3" loop></audio>
+    <audio id="raabtaSong" src="raabta.mp3" loop></audio>
+
+    <!-- 🎛️ FIXED TOP MUSIC CONTROLS (Appears on Page 2 & 3) -->
+    <div id="audioControls" class="audio-controls-container">
+        <button id="btnHaareya" class="music-btn" onclick="toggleSong('haareya')">
+            <span class="music-icon">▶️</span> <span class="music-text">Haareya</span>
+        </button>
+        <button id="btnRaabta" class="music-btn" onclick="toggleSong('raabta')">
+            <span class="music-icon">▶️</span> <span class="music-text">Raabta</span>
+        </button>
+    </div>
+
+    <!-- 🚪 PAGE 1: BABY PINK ENTER PAGE -->
+    <div id="page1" class="page active">
+        <button class="enter-btn" onclick="celebrateAndEnter(event)">Enter</button>
+    </div>
+
+    <!-- ☝️ PAGE 2: WWE ROMAN REIGNS THEME -->
+    <div id="page2" class="page">
+        <div class="wwe-card">
+            <div class="pink-title">You're my Tribal Chief....The only person I'll always acknowledge.</div>
+            <div class="red-body">
+                You're the Head of the Table in my life, the Undisputed Champion of my heart, and my favorite tag-team partner. No matter how tough the match gets, you're the one I want in my corner. You make me feel safer than a Bloodline member and happier than a WrestleMania main event.
+                <br><br>
+                You don't need a championship belt because you've already won the biggest title..my heart. Every day with you feels like a victory celebration. So consider this your official acknowledgment...I acknowledge you, my Tribal Chief. ☝️❤️🏆
+            </div>
+            <button class="wwe-btn" onclick="revealGallery()">Our Memories ✨</button>
+        </div>
+        
+        <!-- Bottom Back Navigation Button -->
+        <button class="back-btn" onclick="navigateBack(2, 1)">⬅️ Back</button>
+    </div>
+
+    <!-- 📸 PAGE 3: COSMIC UNIVERSE BACKGROUND WITH REAL STARS & RAIN -->
+    <div id="page3" class="page">
+        
+        <!-- Real Twinkling Star Field Canvas -->
+        <canvas id="starCanvas"></canvas>
+        
+        <!-- Floating Moon Element -->
+        <div class="cosmic-moon">🌙</div>
+
+        <div class="gallery-container">
+            
+            <!-- Item 1 -->
+            <div class="pic-box">
+                <img src="26012.jpg" alt="Our Picture 1">
+            </div>
+            <p class="yellow-text">
+                Happiest Birthday Muscle Muffin 🫠🫶🏻 Ek time tha jab mai aapko bilkul pasand nahi karti thi, aapki harkate dekh ke 🤣. Aur aaj dekho, wahi insaan meri life ka itna important part ban gaya hai. Shayad sach me God ke plans humse kaafi better hote hai, kyuki agar unhone hum dono ko milane ka plan na banaya hota toh shayad mai apni life ke itne pyare suar jaise insaan se kabhi mil hi nahi pati🥹 Mujhe honestly nahi pata hamari baat kab start hui like pata to hai magar waise bond kaise ban gya even idk😭 kab normal chats aadat ban gayi aur kab aap meri favourite notification ban gaye. Sab kuch itna naturally hua ki pata hi nahi chala kab attachment hui, Bas itna pata hai ki aapne mujhe meri life ke sabse pyare moments diye hain.
+            </p>
+
+            <!-- Item 2 -->
+            <div class="pic-box">
+                <img src="26013.jpg" alt="Our Picture 2">
+            </div>
+            <p class="yellow-text">
+                Aur aapse milna... hihihi. Har baar itna accha lagta hai ki bas mann karta hai teko wahi rok lu. We are literally like monster and diet coke chilling together 😭🫶🏻 You are myyyy Tribal Chief, Head of the Table, Roman Reigns ke paas titles honge, lekin mere paas mera Muscle Muffin hai GOAT😋 Waise ek complaint bhi hai tu mujhe itna ragebait karta h ki kabhi kabhi seriously lagta hai tu pitne wala hai 😭. Lekin phir bhi maza to isi me aati h👉🏻👈🏻🥹
+            </p>
+
+            <!-- Item 3 -->
+            <div class="pic-box">
+                <img src="26014.jpg" alt="Our Picture 3">
+            </div>
+            <p class="yellow-text">
+                mujhe umeed hai ki maine aapko aapke past se better treat kiya hoga. Mujhe umeed hai ki aapko mere saath woh comfort, care aur pyaar feel hua hoga jo aap deserve karte ho. Mai khud perfect nahi hu, galtiyan mujhse bhi hoti hai to maaf kr dena 😔im just a kid babuu🥺👉🏻👈🏻lekin mera intention hamesha yahi rahega ki aap khush raho. Honestly, I feel so lucky to have you. Kabhi kabhi lagta hai ki mujhe itna accha insaan deserve hi nahi tha, phir bhi aap meri life me aa gaye. Aur mai bas itna chahti hu ki chahe life me kitne bhi ups and downs aaye, aap hamesha mere saath raho. Happy Birthday myy Muscle Muffin 💗🧿Thank you for making me the happiest girl, thank you for being my comfort person, aur thank you for choosing me. Omg kitni achi choice h apki🥰 I love you so, so much. ❤️
+            </p>
+
+            <!-- 👑 THE BIG BOLD FINALE WISH -->
+            <h1 class="final-wish">Happiest Birthday My Muscle Muffin ❤️</h1>
+
+            <!-- Bottom Back Navigation Button -->
+            <button class="back-btn" onclick="navigateBack(3, 2)" style="border-color: #ffffff; color: #ffffff; background: rgba(255,255,255,0.15);">⬅️ Back</button>
+        </div>
+    </div>
+
+    <!-- --- CELEBRATION & STARFIELD SCRIPTS --- -->
+    <script>
+        let page2RainInterval;
+        let page3RainInterval;
+        let starAnimationId;
+        
+        // --- SAFE AUDIO ELEMENTS FETCH ---
+        const haareya = document.getElementById('haareyaSong');
+        const raabta = document.getElementById('raabtaSong');
+        
+        function toggleSong(track) {
+            const btnH = document.getElementById('btnHaareya');
+            const btnR = document.getElementById('btnRaabta');
+            
+            if (!haareya || !raabta) return; // Prevent crashes if audio elements are completely missing
+
+            try {
+                if (track === 'haareya') {
+                    if (haareya.paused) {
+                        raabta.pause(); 
+                        if (btnR) {
+                            btnR.classList.remove('playing');
+                            let icon = btnR.querySelector('.music-icon');
+                            if (icon) icon.innerText = '▶️';
+                        }
+                        
+                        haareya.play().catch(e => console.log("Audio blocked by browser config:", e));
+                        if (btnH) {
+                            btnH.classList.add('playing');
+                            let icon = btnH.querySelector('.music-icon');
+                            if (icon) icon.innerText = '⏸️';
+                        }
+                    } else {
+                        haareya.pause();
+                        if (btnH) {
+                            btnH.classList.remove('playing');
+                            let icon = btnH.querySelector('.music-icon');
+                            if (icon) icon.innerText = '▶️';
+                        }
+                    }
+                } else if (track === 'raabta') {
+                    if (raabta.paused) {
+                        haareya.pause(); 
+                        if (btnH) {
+                            btnH.classList.remove('playing');
+                            let icon = btnH.querySelector('.music-icon');
+                            if (icon) icon.innerText = '▶️';
+                        }
+                        
+                        raabta.play().catch(e => console.log("Audio blocked by browser config:", e));
+                        if (btnR) {
+                            btnR.classList.add('playing');
+                            let icon = btnR.querySelector('.music-icon');
+                            if (icon) icon.innerText = '⏸️';
+                        }
+                    } else {
+                        raabta.pause();
+                        if (btnR) {
+                            btnR.classList.remove('playing');
+                            let icon = btnR.querySelector('.music-icon');
+                            if (icon) icon.innerText = '▶️';
+                        }
+                    }
+                }
+            } catch(err) {
+                console.log("Audio error suppressed safely:", err);
+            }
+        }
+
+        function celebrateAndEnter(event) {
+            const btn = event.target;
+            if (btn) {
+                const rect = btn.getBoundingClientRect();
+                const startX = rect.left + rect.width / 2;
+                const startY = rect.top + rect.height / 2;
+
+                for (let i = 0; i < 100; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('confetti');
+                    
+                    const colors = ['#ff4d6d', '#ff758f', '#facc15', '#38b000', '#00b4d8', '#ffffff'];
+                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const force = 120 + Math.random() * 250;
+                    const x = Math.cos(angle) * force;
+                    const y = Math.sin(angle) * force;
+                    
+                    particle.style.setProperty('--x', `${x}px`);
+                    particle.style.setProperty('--y', `${y}px`);
+                    particle.style.left = `${startX}px`;
+                    particle.style.top = `${startY}px`;
+                    
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 1400);
+                }
+            }
+
+            // Unhide panel and try to trigger track 1 safely
+            const controls = document.getElementById('audioControls');
+            if (controls) controls.style.display = 'block';
+            
+            toggleSong('haareya');
+
+            // FORCE TRANSITION: This will transition pages no matter what happens above
+            setTimeout(() => {
+                const p1 = document.getElementById('page1');
+                const p2 = document.getElementById('page2');
+                if (p1) p1.classList.remove('active');
+                if (p2) p2.classList.add('active');
+                startRain('page2');
+            }, 400);
+        }
+
+        function revealGallery() {
+            stopRain('page2'); 
+            const p2 = document.getElementById('page2');
+            const p3 = document.getElementById('page3');
+            if (p2) p2.classList.remove('active');
+            if (p3) p3.classList.add('active');
+            
+            startRain('page3'); 
+            initRealStars(); 
+        }
+
+        function navigateBack(currentPage, previousPage) {
+            stopRain('page2');
+            stopRain('page3');
+            cancelAnimationFrame(starAnimationId);
+
+            const curr = document.getElementById(`page${currentPage}`);
+            const prev = document.getElementById(`page${previousPage}`);
+            if (curr) curr.classList.remove('active');
+            if (prev) prev.classList.add('active');
+
+            if (previousPage === 2) startRain('page2');
+            if (previousPage === 3) {
+                startRain('page3');
+                initRealStars();
+            }
+            if (previousPage === 1) {
+                const controls = document.getElementById('audioControls');
+                if (controls) controls.style.display = 'none';
+                if (haareya) haareya.pause();
+                if (raabta) raabta.pause();
+                
+                const btnH = document.getElementById('btnHaareya');
+                const btnR = document.getElementById('btnRaabta');
+                if (btnH) {
+                    btnH.classList.remove('playing');
+                    let icon = btnH.querySelector('.music-icon');
+                    if (icon) icon.innerText = '▶️';
+                }
+                if (btnR) {
+                    btnR.classList.remove('playing');
+                    let icon = btnR.querySelector('.music-icon');
+                    if (icon) icon.innerText = '▶️';
+                }
+            }
+        }
+
+        // --- HEART / EMOJI RAIN EFFECT ---
+        function startRain(pageId) {
+            const container = document.getElementById(pageId);
+            if (!container) return;
+            const emojis = ['❤️', '💖', '🥰', '☝️', '👑', '🏆', '🔥'];
+
+            const interval = setInterval(() => {
+                if (!container.classList.contains('active')) return;
+                
+                const drop = document.createElement('div');
+                drop.classList.add('rain-drop');
+                drop.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = (2.5 + Math.random() * 2) + 's';
+                drop.style.fontSize = (18 + Math.random() * 16) + 'px';
+                
+                container.appendChild(drop);
+                setTimeout(() => drop.remove(), 4500);
+            }, 220);
+
+            if (pageId === 'page2') page2RainInterval = interval;
+            if (pageId === 'page3') page3RainInterval = interval;
+        }
+
+        function stopRain(pageId) {
+            if (pageId === 'page2') clearInterval(page2RainInterval);
+            if (pageId === 'page3') clearInterval(page3RainInterval);
+        }
+
+        // --- REAL TWINKLING STARS CANVAS GENERATOR ---
+        function initRealStars() {
+            const canvas = document.getElementById('starCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                if (canvas.parentElement) {
+                    canvas.width = canvas.parentElement.offsetWidth;
+                    canvas.height = canvas.parentElement.offsetHeight;
+                }
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const starsArray = [];
+            const starsCount = 150;
+
+            for(let i = 0; i < starsCount; i++) {
+                starsArray.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.8,
+                    alpha: Math.random(),
+                    speed: 0.01 + Math.random() * 0.03
+                });
+            }
+
+            function animateStars() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ffffff';
+
+                for(let i = 0; i < starsCount; i++) {
+                    let s = starsArray[i];
+                    s.alpha += s.speed;
+                    if (s.alpha > 1 || s.alpha < 0) {
+                        s.speed = -s.speed; 
+                    }
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                    ctx.globalAlpha = Math.max(0.1, s.alpha);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1.0; 
+                starAnimationId = requestAnimationFrame(animateStars);
+            }
+            animateStars();
+        }
+    </script>
+</body>
+</html>
